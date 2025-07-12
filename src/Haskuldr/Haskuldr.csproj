@@ -8,7 +8,7 @@
     </PropertyGroup>
     
     <ItemGroup>
-      <PackageReference Include="Haskuldr.Abstractions" Version="1.0.0" />
+      <PackageReference Include="Haskuldr.Abstractions" Version="1.0.1" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.3" />
     </ItemGroup>
 
