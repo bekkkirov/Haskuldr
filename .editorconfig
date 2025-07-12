@@ -271,6 +271,7 @@ resharper_web_config_wrong_module_highlighting = warning
 
 # Disabled
 
+dotnet_diagnostic.CA1000.severity = none
 dotnet_diagnostic.CA1040.severity = none
 dotnet_diagnostic.CA1002.severity = none
 dotnet_diagnostic.CA1062.severity = none
@@ -278,3 +279,4 @@ dotnet_diagnostic.CA1711.severity = none
 dotnet_diagnostic.CA1716.severity = none
 dotnet_diagnostic.CA1724.severity = none
 dotnet_diagnostic.CA1812.severity = none
+dotnet_diagnostic.CA2225.severity = none
