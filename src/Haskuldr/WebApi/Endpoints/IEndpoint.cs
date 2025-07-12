@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Routing;
 
-namespace Haskuldr.MinimalApi;
+namespace Haskuldr.WebApi.Endpoints;
 
 public interface IEndpoint
 {

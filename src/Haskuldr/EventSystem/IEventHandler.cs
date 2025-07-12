@@ -1,6 +1,6 @@
-﻿using Haskuldr.Abstractions.EventBus;
+﻿using Haskuldr.Abstractions.EventSystem;
 
-namespace Haskuldr.Bus;
+namespace Haskuldr.EventSystem;
 
 public interface IEventHandler<in TEvent> where TEvent : IEvent 
 {

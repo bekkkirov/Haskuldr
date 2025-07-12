@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
-using Haskuldr.Abstractions.EventBus;
+using Haskuldr.Abstractions.EventSystem;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Haskuldr.Bus;
+namespace Haskuldr.EventSystem;
 
 public class EventBus(IServiceProvider serviceProvider) : IEventBus
 {
