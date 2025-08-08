@@ -4,8 +4,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Haskuldr", "src\Haskuldr\Ha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Haskuldr.Abstractions", "src\Haskuldr.Abstractions\Haskuldr.Abstractions.csproj", "{EB19AB15-E752-46AD-AEE6-F3202A1EF96F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Haskuldr.Sample", "samples\Haskuldr.Sample\Haskuldr.Sample.csproj", "{5DF9BA08-89FE-4ED2-8CE7-105F3ADF1185}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{D2960CA2-DEFF-47F4-A8D2-6DCF70340D16}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -27,9 +25,5 @@ Global
 		{EB19AB15-E752-46AD-AEE6-F3202A1EF96F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB19AB15-E752-46AD-AEE6-F3202A1EF96F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB19AB15-E752-46AD-AEE6-F3202A1EF96F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5DF9BA08-89FE-4ED2-8CE7-105F3ADF1185}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5DF9BA08-89FE-4ED2-8CE7-105F3ADF1185}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5DF9BA08-89FE-4ED2-8CE7-105F3ADF1185}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5DF9BA08-89FE-4ED2-8CE7-105F3ADF1185}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,14 +1,13 @@
 ﻿using System.Reflection;
 using Haskuldr.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Haskuldr.WebApi.Endpoints;
+namespace Haskuldr.Mediator;
 
-public static class DependencyInjection
+public static class DependencyInjectionExtensions
 {
-    public static IServiceCollection AddEndpoints(
+    public static IServiceCollection AddMediator(
         this IServiceCollection services,
         ServiceLifetime lifeTime = ServiceLifetime.Transient,
         params Assembly[] assemblies)
@@ -18,29 +17,19 @@ public static class DependencyInjection
             throw new ArgumentException("At least one assembly must be provided", nameof(assemblies));
         }
         
-        var baseEndpointType = typeof(IEndpoint);
+        services.AddScoped<IMediator, Mediator>();
+        
+        var baseHandlerType = typeof(IRequestHandler<>);
         
         foreach (var assembly in assemblies)
         {
-            var serviceDescriptors = assembly.GetServiceDescriptors(
-                baseEndpointType,
+            var serviceDescriptors = assembly.GetGenericServiceDescriptors(
+                baseHandlerType,
                 lifeTime);
 
             services.TryAddEnumerable(serviceDescriptors);
         }
-        
+
         return services;
-    }
-
-    public static IApplicationBuilder MapEndpoints(this WebApplication app)
-    {
-        var endpoints = app.Services.GetRequiredService<IEnumerable<IEndpoint>>();
-
-        foreach (var endpoint in endpoints)
-        {
-            endpoint.MapEndpoint(app);
-        }
-
-        return app;
     }
 }
