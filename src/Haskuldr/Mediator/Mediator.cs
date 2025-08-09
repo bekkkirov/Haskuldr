@@ -8,7 +8,9 @@ public class Mediator(IServiceProvider serviceProvider) : IMediator
 {
     public async Task<Result<TResponse, Error>> SendAsync<TRequest, TResponse>(
         TRequest request,
-        CancellationToken cancellationToken = default) where TRequest : IRequest<TResponse>
+        CancellationToken cancellationToken = default)
+        where TRequest : IRequest<TResponse>
+        where TResponse : notnull
     {
         var queryHandlers = serviceProvider
                             .GetServices<IRequestHandler<TRequest, TResponse>>()
@@ -24,7 +26,8 @@ public class Mediator(IServiceProvider serviceProvider) : IMediator
 
     public async Task<Option<Error>> SendAsync<TRequest>(
         TRequest request,
-        CancellationToken cancellationToken = default) where TRequest : IRequest
+        CancellationToken cancellationToken = default) 
+        where TRequest : IRequest
     {
         var commandHandlers = serviceProvider
                               .GetServices<IRequestHandler<TRequest>>()
