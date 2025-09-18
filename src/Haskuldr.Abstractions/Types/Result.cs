@@ -2,6 +2,12 @@
 
 namespace Haskuldr.Abstractions.Types;
 
+/// <summary>
+/// Represents a result object that encapsulates either a successful value of type <typeparamref name="TValue"/>
+/// or an error of type <typeparamref name="TError"/>.
+/// </summary>
+/// <typeparam name="TValue">The type of the value in case of success.</typeparam>
+/// <typeparam name="TError">The type of the error in case of failure.</typeparam>
 public readonly record struct Result<TValue, TError> 
     where TValue : notnull
     where TError: notnull
@@ -9,10 +15,16 @@ public readonly record struct Result<TValue, TError>
     private readonly TValue? _value;
     private readonly TError? _error;
 
+    /// <summary>
+    /// Gets a value indicating whether the result represents a success case.
+    /// </summary>
     [MemberNotNullWhen(true, nameof(_value))]
     [MemberNotNullWhen(false, nameof(_error))]
     public bool IsSuccess { get; }
 
+    /// <summary>
+    /// Gets a value indicating whether the result represents an error case.
+    /// </summary>
     [MemberNotNullWhen(true, nameof(_error))]
     [MemberNotNullWhen(false, nameof(_value))]
     public bool IsError => !IsSuccess;
@@ -31,7 +43,12 @@ public readonly record struct Result<TValue, TError>
         IsSuccess = false;
     }
 
-    public bool TryPickValue([NotNullWhen(true)] out TValue? value, out TError? error)
+    /// <summary>
+    /// Attempts to retrieve the success value of this <see cref="Result{TValue,TError}"/>.
+    /// </summary>
+    public bool TryPickValue(
+        [NotNullWhen(true)] out TValue? value,
+        [NotNullWhen(false)] out TError? error)
     {
         value = IsSuccess ? _value : default;
         error = default;
@@ -39,7 +56,12 @@ public readonly record struct Result<TValue, TError>
         return IsSuccess;
     }
 
-    public bool TryPickError([NotNullWhen(true)] out TError? error, out TValue? value)
+    /// <summary>
+    /// Attempts to retrieve the error value of this <see cref="Result{TValue,TError}"/>
+    /// </summary>
+    public bool TryPickError(
+        [NotNullWhen(true)] out TError? error,
+        [NotNullWhen(false)] out TValue? value)
     {
         error = IsError ? _error : default;
         value = default;
@@ -47,13 +69,20 @@ public readonly record struct Result<TValue, TError>
         return IsError;
     }
 
+    /// <summary>
+    /// Retrieves the success value of the result if the result represents a success, otherwise throws an exception.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown if the result represents an error.</exception>
     public TValue GetValue()
     {
         return IsSuccess 
             ? _value 
             : throw new InvalidOperationException("Cannot access value because result is error");   
     }
-    
+
+    /// <summary>
+    /// Retrieves the success value if the result represents a success, or the default value of the success type if the result represents a failure.
+    /// </summary>
     public TValue? GetValueOrDefault()
     {
         return IsSuccess 
@@ -61,6 +90,10 @@ public readonly record struct Result<TValue, TError>
             : default;
     }
 
+    /// <summary>
+    /// Retrieves the error value of the result if the result represents an error, otherwise throws an exception.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when the result represents a success.</exception>
     public TError GetError()
     {
         return IsError 
@@ -68,6 +101,9 @@ public readonly record struct Result<TValue, TError>
             : throw new InvalidOperationException("Cannot access error because result is success");  
     }
 
+    /// <summary>
+    /// Retrieves the error value if the result represents a failure. If the result is a success, returns the default value for <typeparamref name="TError"/>.
+    /// </summary>
     public TError? GetErrorOrDefault()
     {
         return IsError 
@@ -75,28 +111,25 @@ public readonly record struct Result<TValue, TError>
             : default;
     }
 
-    public TResult Match<TResult>(Func<TValue, TResult> onSuccess, Func<TError, TResult> onError)
+    /// <summary>
+    /// Maps the value contained in this <see cref="Result{TValue,TError}"/> to a result of type <typeparamref name="TResult"/> using the provided mapping functions.
+    /// </summary>
+    public TResult Map<TResult>(Func<TValue, TResult> onSuccess, Func<TError, TResult> onError)
     {
         return IsSuccess ? onSuccess(_value) : onError(_error!);
     }
-    
-    public void Match(Action<TValue> onSuccess, Action<TError> onError)
-    {
-        if (IsSuccess)
-        {
-            onSuccess(_value);
-        }
-        else
-        {
-            onError(_error);
-        }
-    }
-    
+
+    /// <summary>
+    /// Creates a success result containing the specified value.
+    /// </summary>
     public static Result<TValue, TError> FromValue(TValue value)
     {
         return new Result<TValue, TError>(value);
     }
 
+    /// <summary>
+    /// Creates an error result containing the specified error.
+    /// </summary>
     public static Result<TValue, TError> FromError(TError error)
     {
         return new Result<TValue, TError>(error);
