@@ -19,12 +19,12 @@ public static class DependencyInjectionExtensions
         
         services.AddScoped<IMediator, Mediator>();
         
-        var baseHandlerType = typeof(IRequestHandler<>);
+        var baseHandlerTypes = new [] {typeof(IRequestHandler<>), typeof(IRequestHandler<,>)};
         
         foreach (var assembly in assemblies)
         {
             var serviceDescriptors = assembly.GetGenericServiceDescriptors(
-                baseHandlerType,
+                baseHandlerTypes,
                 lifeTime);
 
             services.TryAddEnumerable(serviceDescriptors);
