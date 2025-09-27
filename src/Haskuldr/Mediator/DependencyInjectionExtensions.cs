@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Haskuldr.DependencyInjection;
+using Haskuldr.Shared;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -12,10 +13,7 @@ public static class DependencyInjectionExtensions
         ServiceLifetime lifeTime = ServiceLifetime.Transient,
         params Assembly[] assemblies)
     {
-        if (assemblies.Length == 0)
-        {
-            throw new ArgumentException("At least one assembly must be provided", nameof(assemblies));
-        }
+        ThrowHelper.ThrowIfEmpty(assemblies);
         
         services.AddScoped<IMediator, Mediator>();
         

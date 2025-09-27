@@ -5,6 +5,11 @@ namespace Haskuldr.DependencyInjection;
 
 public static class AssemblyExtensions
 {
+    public static IEnumerable<Type> GetConcreteTypes(this Assembly assembly)
+    {
+        return assembly.ExportedTypes.Where(type => type is { IsClass: true, IsAbstract: false });
+    }
+    
     public static IEnumerable<ServiceDescriptor> GetGenericServiceDescriptors(
         this Assembly assembly,
         Type baseType,
@@ -44,11 +49,6 @@ public static class AssemblyExtensions
                .GetConcreteTypes()
                .Where(type => type.IsAssignableTo(baseType))
                .Select(type => ServiceDescriptor.Describe(baseType, type, lifeTime));
-    }
-
-    private static IEnumerable<Type> GetConcreteTypes(this Assembly assembly)
-    {
-        return assembly.ExportedTypes.Where(type => type is { IsAbstract: false, IsInterface: false });
     }
 
     private static IEnumerable<ServiceDescriptor> ToServiceDescriptors(
