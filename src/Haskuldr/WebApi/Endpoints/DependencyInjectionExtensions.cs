@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Haskuldr.DependencyInjection;
 using Haskuldr.Shared;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -11,7 +11,6 @@ public static class DependencyInjectionExtensions
 {
     public static IServiceCollection AddEndpoints(
         this IServiceCollection services,
-        ServiceLifetime lifeTime = ServiceLifetime.Transient,
         params Assembly[] assemblies)
     {
         ThrowHelper.ThrowIfEmpty(assemblies);
@@ -22,7 +21,8 @@ public static class DependencyInjectionExtensions
         {
             var serviceDescriptors = assembly.GetServiceDescriptors(
                 baseEndpointType,
-                lifeTime);
+                ServiceLifetime.Transient,
+                true);
 
             services.TryAddEnumerable(serviceDescriptors);
         }
@@ -30,9 +30,11 @@ public static class DependencyInjectionExtensions
         return services;
     }
 
-    public static IApplicationBuilder MapEndpoints(this WebApplication app)
+    public static IEndpointRouteBuilder MapEndpoints(
+        this IEndpointRouteBuilder app,
+        IServiceProvider serviceProvider)
     {
-        var endpoints = app.Services.GetRequiredService<IEnumerable<IEndpoint>>();
+        var endpoints = serviceProvider.GetRequiredService<IEnumerable<IEndpoint>>();
 
         foreach (var endpoint in endpoints)
         {

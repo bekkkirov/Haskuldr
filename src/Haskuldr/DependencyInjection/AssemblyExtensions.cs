@@ -5,9 +5,15 @@ namespace Haskuldr.DependencyInjection;
 
 public static class AssemblyExtensions
 {
-    public static IEnumerable<Type> GetConcreteTypes(this Assembly assembly)
+    public static IEnumerable<Type> GetConcreteTypes(
+        this Assembly assembly,
+        bool includeNonPublic = false)
     {
-        return assembly.ExportedTypes.Where(type => type is { IsClass: true, IsAbstract: false });
+        var types = includeNonPublic 
+            ? assembly.DefinedTypes
+            : assembly.ExportedTypes;
+        
+        return types.Where(type => type is { IsClass: true, IsAbstract: false });
     }
     
     public static IEnumerable<ServiceDescriptor> GetGenericServiceDescriptors(
@@ -43,10 +49,11 @@ public static class AssemblyExtensions
     public static IEnumerable<ServiceDescriptor> GetServiceDescriptors(
         this Assembly assembly,
         Type baseType,
-        ServiceLifetime lifeTime = ServiceLifetime.Scoped)
+        ServiceLifetime lifeTime = ServiceLifetime.Scoped,
+        bool includeNonPublic = false)
     {
         return assembly
-               .GetConcreteTypes()
+               .GetConcreteTypes(includeNonPublic)
                .Where(type => type.IsAssignableTo(baseType))
                .Select(type => ServiceDescriptor.Describe(baseType, type, lifeTime));
     }

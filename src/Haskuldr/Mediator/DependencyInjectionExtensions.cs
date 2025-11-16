@@ -41,16 +41,11 @@ public static class DependencyInjectionExtensions
             throw new InvalidOperationException($"Decorator {decoratorType.FullName} is not an open generic type");
         }
 
-        var requests = new List<Type> {
-            typeof(IRequestHandler<>),
-            typeof(IRequestHandler<,>)
-        };
-
         var serviceType = decoratorType
                           .GetInterfaces()
                           .SingleOrDefault(x => 
                               x.IsGenericType && 
-                              requests.Contains(x.GetGenericTypeDefinition()));
+                              MediatorConfiguration.BaseHandlerTypes.Contains(x.GetGenericTypeDefinition()));
 
         if (serviceType is null)
         {
@@ -73,7 +68,7 @@ public static class DependencyInjectionExtensions
         {
             var newDecoratorType = decoratorType.MakeGenericType(descriptor.ServiceType.GenericTypeArguments);
 
-            services.DecorateInternal(serviceType, newDecoratorType);
+            services.DecorateInternal(descriptor.ServiceType, newDecoratorType);
         }
 
         return services;
