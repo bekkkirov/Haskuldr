@@ -51,7 +51,7 @@ public readonly record struct Result<TValue, TError>
         [NotNullWhen(false)] out TError? error)
     {
         value = IsSuccess ? _value : default;
-        error = default;
+        error = IsError ? _error : default;
 
         return IsSuccess;
     }
@@ -64,7 +64,7 @@ public readonly record struct Result<TValue, TError>
         [NotNullWhen(false)] out TValue? value)
     {
         error = IsError ? _error : default;
-        value = default;
+        value = IsSuccess ? _value : default;
 
         return IsError;
     }
