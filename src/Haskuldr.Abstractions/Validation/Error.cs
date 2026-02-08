@@ -2,37 +2,34 @@
 
 public sealed record Error
 {
-    public string Code { get; }
+    public ErrorType Type { get; }
+    
+    public string Resource { get; }
 
     public string? Description { get; }
 
-    public ErrorType Type { get; }
-
     private Error(
-        string code,
-        string? description,
-        ErrorType type)
+        ErrorType type,
+        string resource,
+        string? description)
     {
-        Code = code;
-        Description = description;
         Type = type;
+        Resource = resource;
+        Description = description;
     }
 
-    public static Error Validation(string code, string? description) =>
-        new(code, description, ErrorType.Validation);
+    public static Error NotFound(string resource, string? description = null) =>
+        new(ErrorType.NotFound, resource, description);
 
-    public static Error NotFound(string code, string? description) =>
-        new(code, description, ErrorType.NotFound);
+    public static Error Unauthorized(string resource, string? description = null) =>
+        new(ErrorType.Unauthorized, resource, description);
 
-    public static Error Unauthorized(string code, string? description) =>
-        new(code, description, ErrorType.Unauthorized);
+    public static Error Forbidden(string resource, string? description = null) =>
+        new(ErrorType.Forbidden, resource, description);
 
-    public static Error Forbidden(string code, string? description) =>
-        new(code, description, ErrorType.Forbidden);
+    public static Error Conflict(string resource, string? description = null) =>
+        new(ErrorType.Conflict, resource, description);
     
-    public static Error Conflict(string code, string? description) =>
-        new(code, description, ErrorType.Conflict);
-    
-    public static Error Internal(string code, string? description) =>
-        new(code, description, ErrorType.Internal);
+    public static Error Internal(string resource, string? description = null) =>
+        new(ErrorType.Internal, resource, description);
 }
