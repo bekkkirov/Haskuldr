@@ -3,7 +3,7 @@
 public sealed record ValidationError(
     string Resource,
     IReadOnlyCollection<ValidationDetail> Details) :
-    ErrorBase(
+    Error(
         ErrorType.Validation,
         Resource,
         "One or more validation errors occurred");
