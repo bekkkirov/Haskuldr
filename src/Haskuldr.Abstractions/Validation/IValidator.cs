@@ -4,5 +4,5 @@ namespace Haskuldr.Abstractions.Validation;
 
 public interface IValidator<in TInput>
 {
-    Option<ValidationError> Validate(TInput instance);
+    Option<Error> Validate(TInput instance);
 }
